@@ -14,5 +14,11 @@
     "body-parser"
   ],
   "author": "Donut Team",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "formidable": "^3.2.4"
+  },
+  "devDependencies": {
+    "@donutteam/eslint-config": "^1.0.5"
+  }
 }
