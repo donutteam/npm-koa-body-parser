@@ -102,18 +102,19 @@ export class BodyParserMiddleware
 	}
 
 	/**
+	 * The middleware function.
+	 * 
+	 * @type {import("koa").Middleware}
+	 */
+	execute;
+
+	/**
 	 * Constructs a new BodyParserMiddleware.
 	 *
 	 * @author Loren Goodwin
 	 */
 	constructor()
 	{
-		/**
-		 * A middleware for parsing JSON and form data request bodies.
-		 *
-		 * @param {import("koa").Context} context A Koa context.
-		 * @param {Function} next A function that executes the next middleware.
-		 */
 		this.execute = async (context, next) =>
 		{
 			//
@@ -147,7 +148,7 @@ export class BodyParserMiddleware
 					break;
 
 				default:
-					throw new Error(`[BodyParser] Unsupported Content-Type: ${ contentType }`);
+					throw new Error(`[BodyParserMiddleware] Unsupported Content-Type: ${ contentType }`);
 			}
 
 			//

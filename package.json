@@ -4,7 +4,12 @@
   "description": "A class for creating Koa middlewares that parse certain types of request bodies.",
   "main": "./index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . -c ./.eslintrc.cjs",
+    "lint-fix": "eslint . -c ./.eslintrc.cjs --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donutteam/koa-body-parser.git"
   },
   "keywords": [
     "koa",
@@ -20,6 +25,7 @@
     "formidable": "^3.2.4"
   },
   "devDependencies": {
-    "@donutteam/eslint-config": "^1.0.5"
+    "@donutteam/eslint-config": "^1.0.5",
+    "koa": "^2.13.4"
   }
 }
