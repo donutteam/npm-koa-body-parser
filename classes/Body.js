@@ -26,4 +26,9 @@ export class Body
 	 * An object containg arrays of files that were in the body.
 	 */
 	fileArrays = {};
+
+	/**
+	 * The raw body of the request.
+	 */
+	raw;
 }

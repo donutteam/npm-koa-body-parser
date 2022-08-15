@@ -98,6 +98,8 @@ export class BodyParserMiddleware
 			body.fieldArrays[ key ] = [ value ];
 		}
 
+		body.raw = rawBody;
+
 		return body;
 	}
 
