@@ -71,7 +71,11 @@ export class BodyParserMiddleware
 					body.fieldArrays[ fieldName ] = fieldArray;
 				}
 
-				body.files = files;
+				for (const [ fileName, fileArray ] of Object.entries(files))
+				{
+					body.files[ fileName ] = fileArray[ 0 ];
+					body.fileArrays[ fileName ] = fileArray;
+				}
 
 				resolve(body);
 			});
