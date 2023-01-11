@@ -2,7 +2,10 @@
 // Imports
 //
 
+import { IncomingMessage } from "node:http";
+
 import { Formidable } from "formidable";
+import { Middleware } from "koa";
 
 import { Body } from "./Body.js";
 
@@ -10,18 +13,15 @@ import { Body } from "./Body.js";
 // Middleware
 //
 
-/**
- * A class for creating body parser middlewares.
- */
+/** A class for creating body parser middlewares. */
 export class BodyParserMiddleware
 {
 	/**
 	 * Gets a request body from an IncomingMessage.
 	 *
-	 * @param {import("node:http").IncomingMessage} incomingMessage An incoming message.
 	 * @author Loren Goodwin
 	 */
-	static getBody(incomingMessage)
+	static async getBody(incomingMessage : IncomingMessage) : Promise<string>
 	{
 		return new Promise((resolve, reject) =>
 		{
@@ -47,10 +47,9 @@ export class BodyParserMiddleware
 	/**
 	 * Parses a form data request body.
 	 *
-	 * @param {import("http").IncomingMessage} incomingMessage An incoming message.
-	 * @returns {Object} An object containing the fields from the form data.
+	 * @author Loren Goodwin
 	 */
-	static parseFormBody(incomingMessage)
+	static async parseFormBody(incomingMessage : IncomingMessage) : Promise<Body>
 	{
 		return new Promise((resolve, reject) =>
 		{
@@ -65,16 +64,32 @@ export class BodyParserMiddleware
 
 				const body = new Body();
 
-				for (const [ fieldName, fieldArray ] of Object.entries(fields))
+				for (const [ name, value ] of Object.entries(fields))
 				{
-					body.fields[ fieldName ] = fieldArray[ 0 ];
-					body.fieldArrays[ fieldName ] = fieldArray;
+					if (Array.isArray(value))
+					{
+						body.fields[name] = value[0];
+						body.fieldArrays[name] = value;
+					}
+					else
+					{
+						body.fields[name] = value;
+						body.fieldArrays[name] = [ value ];
+					}
 				}
 
-				for (const [ fileName, fileArray ] of Object.entries(files))
+				for (const [ name, value ] of Object.entries(files))
 				{
-					body.files[ fileName ] = fileArray[ 0 ];
-					body.fileArrays[ fileName ] = fileArray;
+					if (Array.isArray(value))
+					{
+						body.files[name] = value[0];
+						body.fileArrays[name] = value;
+					}
+					else
+					{
+						body.files[name] = value;
+						body.fileArrays[name] = [value];
+					}
 				}
 
 				resolve(body);
@@ -85,10 +100,9 @@ export class BodyParserMiddleware
 	/**
 	 * Parses a JSON request body.
 	 *
-	 * @param {import("http").IncomingMessage} incomingMessage An incoming message.
-	 * @returns {Object} An object containing the fields from the JSON.
+	 * @author Loren Goodwin
 	 */
-	static async parseJsonBody(incomingMessage)
+	static async parseJsonBody(incomingMessage : IncomingMessage) : Promise<Body>
 	{
 		const rawBody = await BodyParserMiddleware.getBody(incomingMessage);
 
@@ -96,10 +110,10 @@ export class BodyParserMiddleware
 
 		const body = new Body();
 
-		for (const [ key, value ] of Object.entries(object))
+		for (const [ name, value ] of Object.entries(object))
 		{
-			body.fields[ key ] = value;
-			body.fieldArrays[ key ] = [ value ];
+			body.fields[name] = value as string;
+			body.fieldArrays[name] = [ value as string ];
 		}
 
 		body.raw = rawBody;
@@ -107,12 +121,8 @@ export class BodyParserMiddleware
 		return body;
 	}
 
-	/**
-	 * The middleware function.
-	 * 
-	 * @type {import("koa").Middleware}
-	 */
-	execute;
+	/** The middleware function. */
+	execute : Middleware;
 
 	/**
 	 * Constructs a new BodyParserMiddleware.
