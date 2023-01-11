@@ -1,6 +1,6 @@
 {
   "name": "@donutteam/koa-body-parser",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A class for creating Koa middlewares that parse certain types of request bodies.",
   "main": "./lib/index.js",
   "scripts": {
