@@ -4,7 +4,7 @@
 
 import { IncomingMessage } from "node:http";
 
-import { Formidable } from "formidable";
+import Formidable from "formidable";
 import { Middleware } from "koa";
 
 import { Body } from "./Body.js";
@@ -53,7 +53,7 @@ export class BodyParserMiddleware
 	{
 		return new Promise((resolve, reject) =>
 		{
-			const formidable = new Formidable();
+			const formidable = new Formidable.Formidable();
 
 			formidable.parse(incomingMessage, (error, fields, files) =>
 			{
